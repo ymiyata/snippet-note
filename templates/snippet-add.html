@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Snippet Note | Add Snippet{% end %}
+
+{% block body %}
+<form action="/snippet" method="POST" class="well">
+    <fieldset>
+        <div class="input-append" style="width: 600px;">
+            <input name="title" type="text" placeholder="Title for this snippet"/><span 
+                class="add-on">Title</span>
+            <select class="span2"></select>
+        </div>
+        <div class="input-append" style="width: 600px;">
+            <input name="description" type="text" class="span5" 
+                placeholder="Description of this snippet"/><span class="add-on">Description</span>
+        </div>
+        <textarea name="snippet" class="span8" style="height: 350px; width: 600px"></textarea>
+        <div class="form-actions">
+            <button type="submit" class="btn">Create Public Snippet</button>
+            <button type="submit" class="btn" name="private">Create Private Snippet</button> 
+        </div>
+    </fieldset>
+</form>
+{% end %}
