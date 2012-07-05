@@ -1,6 +1,8 @@
 import tornado.web
 from tornado import gen
 
+from mongotask import MongoTask
+
 from handlers.base import *
 
 class SnippetHandler(BaseHandler):
@@ -13,14 +15,14 @@ class SnippetHandler(BaseHandler):
     @gen.engine
     def post(self):
         authenticated_user = self.get_current_user()
-        db_user = yield gen.Task(self.db.profile.find_one, {"openid", authenticated_user['openid']})
+        db_user = yield MongoTask(self.db.profile.find_one, {"openid", authenticated_user['openid']})
         title = self.get_argument("title")
         description = self.get_argument("description", "")
         scope = "private" if self.get_argument("private", None) else "public"
         snippet = self.get_argument("snippet", "")
         language = self.get_argument("language", "")
         yield gen.Task(self.db.snippet.insert, {
-            "user": user['_id'],
+            "user": db_user['_id'],
             "title": title,
             "scope": scope,
             "snippet": snippet,
