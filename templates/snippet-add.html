@@ -1,13 +1,20 @@
 {% extends "base.html" %}
+
 {% block title %}Snippet Note | Add Snippet{% end %}
 
 {% block body %}
 <form action="/snippet" method="POST" class="well">
     <fieldset>
+        {% raw xsrf_form_html() %}
         <div class="input-append" style="width: 600px;">
             <input name="title" type="text" placeholder="Title for this snippet"/><span 
                 class="add-on">Title</span>
-            <select class="span2"></select>
+            <select class="span2" name="language">
+                {% import languages %}
+                {% for name, extension in sorted(languages.languages.items()) %}
+                <option value="{{ name }}" {% if extension == "misc" %}selected="selected"{% end %}>{{ name }}</option>
+                {% end %}
+            </select>
         </div>
         <div class="input-append" style="width: 600px;">
             <input name="description" type="text" class="span5" 

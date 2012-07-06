@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Snippet Note | Snippets{% end %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ static_url("css/code-prettify/prettify.css") }}"/>
+{% end %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{ static_url('scripts/code-prettify/prettify.js') }}"></script>
+<script type="text/javascript" src="{{ static_url("scripts/code-prettify/lang-clj.js") }}"></script>
+<script type="text/javascript" src="{{ static_url("scripts/code-prettify/lang-css.js") }}"></script>
+<script type="text/javascript" src="{{ static_url("scripts/code-prettify/lang-go.js") }}"></script>
+<script type="text/javascript" src="{{ static_url("scripts/code-prettify/lang-hs.js") }}"></script>
+<script type="text/javascript" src="{{ static_url("scripts/code-prettify/lang-lisp.js") }}"></script>
+<script type="text/javascript" src="{{ static_url("scripts/code-prettify/lang-lua.js") }}"></script>
+<script type="text/javascript" src="{{ static_url("scripts/code-prettify/lang-n.js") }}"></script>
+<script type="text/javascript" src="{{ static_url("scripts/code-prettify/lang-proto.js") }}"></script>
+<script type="text/javascript" src="{{ static_url("scripts/code-prettify/lang-scala.js") }}"></script>
+<script type="text/javascript" src="{{ static_url("scripts/code-prettify/lang-sql.js") }}"></script>
+<script type="text/javascript" src="{{ static_url("scripts/code-prettify/lang-tex.js") }}"></script>
+<!--
+<script type="text/javascript" src="{{ static_url("scripts/code-prettify/lang-vb.js") }}"></script>i
+-->
+<script type="text/javascript" src="{{ static_url("scripts/code-prettify/lang-vhdl.js") }}"></script>
+<script type="text/javascript" src="{{ static_url("scripts/code-prettify/lang-wiki.js") }}"></script>
+<script type="text/javascript" src="{{ static_url("scripts/code-prettify/lang-xq.js") }}"></script>
+<script type="text/javascript" src="{{ static_url("scripts/code-prettify/lang-yaml.js") }}"></script>
+<script type="text/javascript">
+    $(function() {
+        prettyPrint();
+    });
+</script>
+{% end %}
+
+{% block body %}
+<ul id="snippet-list" class="unstyled">
+    {% for snippet in snippets %}
+    <li>{% module Snippet(snippet) %}</li>
+    {% end %}
+</ul>
+{% end %}

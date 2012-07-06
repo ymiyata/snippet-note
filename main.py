@@ -25,6 +25,7 @@ import tornado.web
 import tornado.options
 from tornado.options import define, options
 
+from modules.snippet import *
 from handlers.snippet import *
 from handlers.authentication import *
 
@@ -39,10 +40,12 @@ class Application(tornado.web.Application):
             xsrf_cookies=True,
             cookie_secret=base64.b64encode(uuid.uuid4().bytes + uuid.uuid4().bytes),
             login_url=u"/login/google",
+            ui_modules={"Snippet": SnippetModule},
         )
         handlers = [
             (r"/", IndexHandler),
             (r"/home", HomeHandler),
+            (r"/mine", SnippetListHandler),
             (r"/snippet", SnippetHandler),
             (r"/logout", LogoutHandler),
             (r"/login/google", GoogleLoginHandler),
