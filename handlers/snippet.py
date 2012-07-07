@@ -41,29 +41,25 @@ class SnippetListHandler(BaseHandler):
     @tornado.web.asynchronous
     @gen.engine
     def get(self):
+        snippet_per_page = 10 
         authenticated_user = self.get_current_user()
         db_user = yield MongoTask(self.db.profile.find_one, {
             "openid": authenticated_user['openid']
         })
         query = {"user": db_user['_id']}
         language = self.get_argument("language", None)
-        num_skip = self.get_argument("num_skip", None)
+        page = int(self.get_argument("page", "0"))
         if language and language in languages:
             query["language"] = language
-        if num_skip: 
-            snippets = yield MongoTask(
-                self.db.snippet.find,
-                spec=query,
-                limit=20,
-                skip=num_skip,
-                sort=[("_id", -1)]
-            )
-        else:
-            snippets = yield MongoTask(
-                self.db.snippet.find,
-                spec=query,
-                limit=20,
-                sort=[("_id", -1)]
-            )
-        self.render(u"snippet-list.html", relative_url="mine", snippets=snippets)
+        snippets = yield MongoTask(
+            self.db.snippet.find,
+            spec=query,
+            limit=snippet_per_page,
+            skip=page * snippet_per_page,
+            sort=[("_id", -1)]
+        )
+        self.render(u"snippet-list.html", relative_url="mine", 
+                                          snippets=snippets,
+                                          language=language,
+                                          page=page)
 
