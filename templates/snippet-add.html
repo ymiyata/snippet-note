@@ -10,8 +10,8 @@
             <input name="title" type="text" placeholder="Title for this snippet"/><span 
                 class="add-on">Title</span>
             <select class="span2" name="language">
-                {% import languages %}
-                {% for name, extension in sorted(languages.languages.items()) %}
+                {% from languages import languages %}
+                {% for name, extension in sorted(languages.items()) %}
                 <option value="{{ name }}" {% if extension == "misc" %}selected="selected"{% end %}>{{ name }}</option>
                 {% end %}
             </select>

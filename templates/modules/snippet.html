@@ -1,8 +1,8 @@
-{% import languages %}
+{% from languages import languages %}
 <div class="well">
     <h3>{{ snippet['language'] }}:&nbsp;{{ snippet['title'] }}</h3>
     <p>{{ snippet['description'] }}</p>
-    {% set lang = languages.languages.get(snippet['language']) %}
+    {% set lang = languages.get(snippet['language']) %}
     {% if not lang %}
         {% set lang = "" %}
     {% end %}
