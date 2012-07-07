@@ -16,10 +16,13 @@
             <div class="navbar navbar-fixed-top">
                 <div class="navbar-inner">
                     <div class="container">
-                        <a class="brand" href="/browse">Snippet Note</a>
+                        <a class="brand" href="/">Snippet Note</a>
                         <ul class="nav">
+                            <li><a href="/browse">Browse</a></li>
+                            {% if current_user %}
                             <li><a href="/mine">My Snippets</a></li>
                             <li><a href="/snippet">New Snippet</a></li>
+                            {% end %}
                         </ul>
                         <ul class="nav pull-right">
                             <li class="dropdown">

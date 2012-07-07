@@ -5,6 +5,8 @@
     <div class="hero-unit">
         <h1 class="page-header">Snippet Note</h1>
         <p class="lead">Snippet Note lets you save code snippets online.</p>
+        {% if not current_user %}
         <a class="btn btn-primary btn-large" href="login/google">Sign in with Google Account</a>
+        {% end %}
     </div>
 {% end %}

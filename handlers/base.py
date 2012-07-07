@@ -20,7 +20,7 @@ class BaseHandler(tornado.web.RequestHandler):
         return self._db
 
     def get_login_url(self):
-        return u"/login/google"
+        return u"/"
 
     def get_current_user(self):
         user_json = self.get_secure_cookie("user")

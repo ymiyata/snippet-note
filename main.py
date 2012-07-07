@@ -40,7 +40,7 @@ class Application(tornado.web.Application):
             static_path=os.path.join(os.path.dirname(__file__), "static"),
             xsrf_cookies=True,
             cookie_secret=base64.b64encode(uuid.uuid4().bytes + uuid.uuid4().bytes),
-            login_url=u"/login/google",
+            login_url=u"/",
             ui_modules={"Snippet": SnippetModule},
         )
         handlers = [
