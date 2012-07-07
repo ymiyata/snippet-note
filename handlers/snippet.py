@@ -48,7 +48,7 @@ class SnippetListHandler(BaseHandler):
         query = {"user": db_user['_id']}
         language = self.get_argument("language", None)
         num_skip = self.get_argument("num_skip", None)
-        if language and language in lanuguages:
+        if language and language in languages:
             query["language"] = language
         if num_skip: 
             snippets = yield MongoTask(

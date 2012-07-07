@@ -1,9 +1,11 @@
 import tornado.escape
 import tornado.web
+from tornado import gen
 
 import asyncmongo
 
 from languages import languages
+from mongotask import *
 
 class BaseHandler(tornado.web.RequestHandler):
     @property
@@ -31,14 +33,14 @@ class IndexHandler(BaseHandler):
         self.render(u"index.html")
 
 class BrowseHandler(BaseHandler):
-    @tornado.web.authenticated
+    @tornado.web.asynchronous
+    @gen.engine
     def get(self):
         query = {"scope": "public"}
         language = self.get_argument("language", None)
         num_skip = self.get_argument("num_skip", None) 
-        if language and langueage in languages:
+        if language and language in languages:
             query["language"] = language
-        print query
         if num_skip: 
             snippets = yield MongoTask(
                 self.db.snippet.find,
@@ -54,5 +56,4 @@ class BrowseHandler(BaseHandler):
                 limit=20,
                 sort=[("_id", -1)]
             )
-        print snippets
         self.render(u"browse.html", snippets=snippets)
