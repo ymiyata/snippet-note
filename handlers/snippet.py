@@ -3,6 +3,7 @@ from datetime import datetime
 import tornado.web
 from tornado import gen
 
+from languages import languages
 from mongotask import MongoTask
 from handlers.base import *
 
@@ -44,5 +45,25 @@ class SnippetListHandler(BaseHandler):
         db_user = yield MongoTask(self.db.profile.find_one, {
             "openid": authenticated_user['openid']
         })
-        snippets = yield MongoTask(self.db.snippet.find, {"user": db_user['_id']});
+        query = {"user": db_user['_id']}
+        language = self.get_argument("language", None)
+        num_skip = self.get_argument("num_skip", None)
+        if language and language in lanuguages:
+            query["language"] = language
+        if num_skip: 
+            snippets = yield MongoTask(
+                self.db.snippet.find,
+                spec=query,
+                limit=20,
+                skip=num_skip,
+                sort=[("_id", -1)]
+            )
+        else:
+            snippets = yield MongoTask(
+                self.db.snippet.find,
+                spec=query,
+                limit=20,
+                sort=[("_id", -1)]
+            )
         self.render(u"snippet-list.html", snippets=snippets)
+

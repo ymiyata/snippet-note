@@ -26,6 +26,7 @@ import tornado.options
 from tornado.options import define, options
 
 from modules.snippet import *
+from handlers.base import *
 from handlers.snippet import *
 from handlers.authentication import *
 
@@ -44,9 +45,9 @@ class Application(tornado.web.Application):
         )
         handlers = [
             (r"/", IndexHandler),
-            (r"/home", HomeHandler),
             (r"/mine", SnippetListHandler),
             (r"/snippet", SnippetHandler),
+            (r"/browse", BrowseHandler),
             (r"/logout", LogoutHandler),
             (r"/login/google", GoogleLoginHandler),
         ]

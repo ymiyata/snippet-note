@@ -37,6 +37,6 @@ class GoogleLoginHandler(BaseHandler, tornado.auth.GoogleMixin):
             self.set_secure_cookie("user", 
                                    tornado.escape.json_encode(db_user),
                                    httponly=True)
-            self.redirect(u"/home")
+            self.redirect(u"/browse")
             return
         self.authenticate_redirect()

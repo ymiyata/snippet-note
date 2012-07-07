@@ -16,7 +16,7 @@
             <div class="navbar navbar-fixed-top">
                 <div class="navbar-inner">
                     <div class="container">
-                        <a class="brand" href="/home">Snippet Note</a>
+                        <a class="brand" href="/browse">Snippet Note</a>
                         <ul class="nav">
                             <li><a href="/mine">My Snippets</a></li>
                             <li><a href="/snippet">New Snippet</a></li>
@@ -26,12 +26,20 @@
                                 {% if current_user %}
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                         {{ current_user['email'] }}<b class="caret"></b></a>
-                                {% end %}
                                 <ul class="dropdown-menu">
                                     <li>
-                                    <a href="/logout">Logout</a>
+                                    <a href="/logout">logout</a>
                                     </li>
                                 </ul>
+                                {% else %}
+                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                        Sign in<b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                    <a href="/login/google">Sign in with Google Account</a>
+                                    </li>
+                                </ul>
+                                {% end %}
                             </li>
                         </ul>
                     </div>

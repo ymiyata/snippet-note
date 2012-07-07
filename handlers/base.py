@@ -1,6 +1,9 @@
 import tornado.escape
+import tornado.web
 
 import asyncmongo
+
+from languages import languages
 
 class BaseHandler(tornado.web.RequestHandler):
     @property
@@ -27,12 +30,29 @@ class IndexHandler(BaseHandler):
     def get(self):
         self.render(u"index.html")
 
-class HomeHandler(BaseHandler):
+class BrowseHandler(BaseHandler):
     @tornado.web.authenticated
     def get(self):
-        json_user = self.get_secure_cookie("user")
-        if json_user:
-            email = tornado.escape.json_decode(json_user)['email']
-            self.render("home.html", email=email)
+        query = {"scope": "public"}
+        language = self.get_argument("language", None)
+        num_skip = self.get_argument("num_skip", None) 
+        if language and langueage in languages:
+            query["language"] = language
+        print query
+        if num_skip: 
+            snippets = yield MongoTask(
+                self.db.snippet.find,
+                spec=query,
+                limit=20,
+                skip=num_skip,
+                sort=[("_id", -1)]
+            )
         else:
-            self.redirect("/")
+            snippets = yield MongoTask(
+                self.db.snippet.find,
+                spec=query,
+                limit=20,
+                sort=[("_id", -1)]
+            )
+        print snippets
+        self.render(u"browse.html", snippets=snippets)
