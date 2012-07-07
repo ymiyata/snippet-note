@@ -65,5 +65,5 @@ class SnippetListHandler(BaseHandler):
                 limit=20,
                 sort=[("_id", -1)]
             )
-        self.render(u"snippet-list.html", snippets=snippets)
+        self.render(u"snippet-list.html", relative_url="mine", snippets=snippets)
 

@@ -33,9 +33,23 @@
 {% end %}
 
 {% block body %}
-<ul id="snippet-list" class="unstyled">
-    {% for snippet in snippets %}
-    <li>{% module Snippet(snippet) %}</li>
-    {% end %}
-</ul>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div id="snippets" class="span9 columns">
+            {% for snippet in snippets %}
+            {% module Snippet(snippet) %}
+            {% end %}
+        </div>
+        {% from languages import languages %}
+        {% from tornado.escape import url_escape %}
+        <div id="sidebar" class="span3 columns">
+            <ul class="nav nav-list">
+                <li class="nav-header">Languages</li>
+                {% for language, extension in sorted(languages.items()) %}
+                <li><a href="/{{ relative_url }}?language={{ url_escape(language) }}">{{ language }}</li>
+                {% end %}
+            </ul>
+        </div>
+    </div>
+</div>
 {% end %}

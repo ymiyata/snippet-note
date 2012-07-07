@@ -56,4 +56,4 @@ class BrowseHandler(BaseHandler):
                 limit=20,
                 sort=[("_id", -1)]
             )
-        self.render(u"browse.html", snippets=snippets)
+        self.render(u"snippet-list.html", relative_url="browse", snippets=snippets)
