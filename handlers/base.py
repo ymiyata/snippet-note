@@ -52,4 +52,5 @@ class BrowseHandler(BaseHandler):
         self.render(u"snippet-list.html", relative_url="browse", 
                                           snippets=snippets,
                                           language=language,
-                                          page=page)
+                                          page=page,
+                                          snippet_per_page=snippet_per_page)

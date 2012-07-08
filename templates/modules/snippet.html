@@ -1,6 +1,10 @@
 {% from languages import languages %}
 <div class="well">
+    {% if editable %}
+    <h3><a href="/snippet/{{ snippet['_id'] }}">{{ snippet['language'] }}:&nbsp;{{ snippet['title'] }}</a></h3>
+    {% else %}
     <h3>{{ snippet['language'] }}:&nbsp;{{ snippet['title'] }}</h3>
+    {% end %}
     <p>{{ snippet['description'] }}</p>
     {% set lang = languages.get(snippet['language']) %}
     {% if not lang %}

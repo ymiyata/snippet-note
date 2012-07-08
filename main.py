@@ -47,6 +47,7 @@ class Application(tornado.web.Application):
             (r"/", IndexHandler),
             (r"/mine", SnippetListHandler),
             (r"/snippet", SnippetHandler),
+            (r"/snippet/(.*)", SnippetUpdateHandler),
             (r"/browse", BrowseHandler),
             (r"/logout", LogoutHandler),
             (r"/login/google", GoogleLoginHandler),

@@ -1,7 +1,9 @@
 from datetime import datetime
 
 import tornado.web
+import tornado.httpclient
 from tornado import gen
+import bson
 
 from languages import languages
 from mongotask import MongoTask
@@ -10,7 +12,7 @@ from handlers.base import *
 class SnippetHandler(BaseHandler):
     @tornado.web.authenticated
     def get(self):
-        self.render(u"snippet-add.html")
+        self.render(u"snippet.html", snippet=None)
 
     @tornado.web.authenticated
     @tornado.web.asynchronous
@@ -35,6 +37,41 @@ class SnippetHandler(BaseHandler):
             "created": datetime.now()
         })
         self.redirect(u"/mine")
+
+class SnippetUpdateHandler(BaseHandler):
+    @tornado.web.authenticated
+    @tornado.web.asynchronous
+    @gen.engine
+    def get(self, snippet_id=None):
+        if not snippet_id:
+            raise tornado.httpclient.HTTPError(405, "Snippet ID is required") 
+        snippet = yield MongoTask(self.db.snippet.find_one, {
+            "_id": bson.objectid.ObjectId(snippet_id)
+        })
+        self.render(u"snippet.html", snippet=snippet)
+
+    @tornado.web.authenticated
+    @tornado.web.asynchronous
+    @gen.engine
+    def post(self, snippet_id=None):
+        if not snippet_id:
+            raise tornado.httpclient.HTTPError(405, "Snippet ID is required") 
+        title = self.get_argument("title")
+        description = self.get_argument("description", "")
+        snippet = self.get_argument("snippet", "")
+        language = self.get_argument("language", "")
+        yield MongoTask(self.db.snippet.update, {
+                "_id": bson.objectid.ObjectId(snippet_id)
+            }, {
+                "$set": {
+                    "title": title,
+                    "description": description,
+                    "snippet": snippet,
+                    "language": language
+                }
+            })
+        self.redirect(u"/mine")
+
 
 class SnippetListHandler(BaseHandler):
     @tornado.web.authenticated
@@ -61,5 +98,6 @@ class SnippetListHandler(BaseHandler):
         self.render(u"snippet-list.html", relative_url="mine", 
                                           snippets=snippets,
                                           language=language,
-                                          page=page)
+                                          page=page,
+                                          snippet_per_page=snippet_per_page)
 

@@ -34,8 +34,9 @@ $(function() {
 <div class="container-fluid">
     <div class="row-fluid">
         <div id="snippets" class="span9 columns">
+            {% set editable = True if relative_url == "mine" else False %}
             {% for snippet in snippets %}
-            {% module Snippet(snippet) %}
+            {% module Snippet(snippet, editable) %}
             {% end %}
             <ul class="pager">
                 {% from urllib import urlencode %}
@@ -52,7 +53,7 @@ $(function() {
                 {% end %}
                 {% set next_page_url = "/%s" % relative_url %}
                 {% set url_params = {} %}
-                {% if len(snippets) == 10 %}
+                {% if len(snippets) == snippet_per_page %}
                     {% set url_params["page"] = (page + 1) %}
                 {% end %}
                 {% if language %}
@@ -66,7 +67,7 @@ $(function() {
                 <a href="{{ previous_page_url }}">&larr; Older</a>
                 </li>
                 {% end %}
-                {% if len(snippets) == 5 %}
+                {% if len(snippets) == snippet_per_page %}
                 <li class="next">
                 <a href="{{ next_page_url }}">Newer &rarr;</a>
                 </li>
