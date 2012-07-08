@@ -46,9 +46,9 @@
 <form action="{{ action_url }}" method="POST" class="well">
     <fieldset>
         {% raw xsrf_form_html() %}
-        <div class="input-append" style="width: 600px;">
-            <input name="title" type="text" placeholder="Title for this snippet"
-                {% if title %}value="{{ title }}"{% end %}/><span class="add-on">Title</span>
+        <div class="input-prepend">
+            <span class="add-on">Title</span><input name="title" type="text" style="width: 381px"
+                placeholder="Title for this snippet" {% if title %}value="{{ title }}"{% end %} class="span4"/>
             <select id="language-selector" class="span2" name="language">
                 {% from languages import languages %}
                 {% for name, extension in sorted(languages.items()) %}
@@ -62,11 +62,9 @@
                 {% end %}
             </select>
         </div>
-        <div class="input-append" style="width: 600px;">
-            <input name="description" type="text" class="span5" 
-                placeholder="Description of this snippet" 
-                {% if description %}value="{{ description }}"{% end %}/><span 
-                class="add-on">Description</span>
+        <div class="input-prepend">
+            <span class="add-on">Description</span><input name="description" type="text" style="width: 514px"
+                placeholder="Description of this snippet" {% if description %}value="{{ description }}"{% end %}/>
         </div>
         <div id="editor">{% if code %}{{ code }}{% end %}</div>
         <textarea id="snippet-data" name="snippet" style="display:none;">
@@ -77,7 +75,7 @@
             <button type="submit" class="btn btn-success">Save Snippet</button>
             {% else %}
             <button type="submit" class="btn btn-success">Create Public Snippet</button>
-            <button type="submit" class="btn btn-success" name="private" value="private">Create Private Snippet</button>
+            <button type="submit" class="btn btn-warning" name="private" value="private">Create Private Snippet</button>
             {% end %}
         </div>
     </fieldset>
