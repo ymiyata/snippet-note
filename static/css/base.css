@@ -1,4 +1,9 @@
 body {
-    position: relative;
-    padding-top: 70px;
+position: relative;
+padding-top: 70px;
+}
+#editor {
+position: relative;
+height: 350px;
+width: 600px;
 }
