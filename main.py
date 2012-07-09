@@ -23,7 +23,7 @@ from settings import settings
 
 class SnippetNoteApplication(tornado.web.Application):
     def __init__(self):
-       tornado.web.Application.__init__(self, urls, **settings)
+        tornado.web.Application.__init__(self, urls, **settings)
 
 def main():
     http_server = tornado.httpserver.HTTPServer(SnippetNoteApplication())
