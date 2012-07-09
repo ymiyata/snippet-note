@@ -1,9 +1,12 @@
-import tornado.escape
 import tornado.web
 from tornado import gen
 
 import asyncmongo
 
+import json
+import bson.json_util
+
+from messages import messages
 from languages import languages
 from mongotask import *
 
@@ -19,14 +22,24 @@ class BaseHandler(tornado.web.RequestHandler):
             self._db = asyncmongo.Client(pool_id="snippetnote_pool", **settings)
         return self._db
 
-    def get_login_url(self):
-        return u"/"
+    def json_deserialize(self, json_data):
+        return json.loads(json_data, object_hook=bson.json_util.object_hook)
+
+    def json_serialize(self, data):
+        return json.dumps(data, default=bson.json_util.default).replace("</", "<\\/")
 
     def get_current_user(self):
         user_json = self.get_secure_cookie("user")
         if user_json:
-            return tornado.escape.json_decode(user_json)
+            return self.json_deserialize(user_json)
         return None
+
+    def write_error(self, status_code, **kwargs):
+        if status_code in messages['error']:
+            message = messages['error'][status_code]
+        else:
+            message = messages['error']['default']
+        self.render(u"error.html", code=status_code, message=message)
 
 class IndexHandler(BaseHandler):
     def get(self):

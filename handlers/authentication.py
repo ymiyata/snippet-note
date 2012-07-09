@@ -21,22 +21,11 @@ class GoogleLoginHandler(BaseHandler, tornado.auth.GoogleMixin):
             authenticated_user = yield MongoTask(self.get_authenticated_user)
             if not authenticated_user:
                 raise tornado.web.HTTPError(500, "Google authentication failed")
-            try:
-                db_user = yield MongoTask(self.db.profile.find_one, {"openid": openid})
-            except Exception as e:
-                raise tornado.web.HTTPError(500, "Error while accesssing database: %r" % e)
-            print db_user
+            db_user = yield MongoTask(self.db.profile.find_one, {"openid": openid})
             if not db_user:
                 db_user = {"openid": openid, "email": authenticated_user['email']}
-                try:
-                    response = yield MongoTask(self.db.profile.insert, db_user)
-                except Exception as e:
-                    raise tornado.web.HTTPError(500, "Error while accesssing database: %r" % e)
-            else:
-                del db_user['_id']
-            self.set_secure_cookie("user", 
-                                   tornado.escape.json_encode(db_user),
-                                   httponly=True)
+                response = yield MongoTask(self.db.profile.insert, db_user, safe=True)
+            self.set_secure_cookie("user", self.json_serialize(db_user), httponly=True)
             self.redirect(u"/browse")
             return
         self.authenticate_redirect()

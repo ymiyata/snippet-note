@@ -49,7 +49,7 @@
         <div class="input-prepend">
             <span class="add-on">Title</span><input name="title" type="text" style="width: 381px"
                 placeholder="Title for this snippet" {% if title %}value="{{ title }}"{% end %} class="span4"/>
-            <select id="language-selector" class="span2" name="language">
+            <select id="language-selector" name="language" style="width: 171px">
                 {% from languages import languages %}
                 {% for name, extension in sorted(languages.items()) %}
                     {% if language %}
@@ -73,6 +73,7 @@
         <div class="form-actions">
             {% if snippet %}
             <button type="submit" class="btn btn-success">Save Snippet</button>
+            <a href="/snippet/delete/{{ snippet['_id'] }}" class="btn btn-danger">Delete Snippet</a>
             {% else %}
             <button type="submit" class="btn btn-success">Create Public Snippet</button>
             <button type="submit" class="btn btn-warning" name="private" value="private">Create Private Snippet</button>
