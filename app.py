@@ -1,18 +1,5 @@
 #!/usr/bin/env python
 
-try:
-    import tornado
-    import pymongo
-    import asyncmongo
-except ImportError, error:
-    module = error.args[-1].split()[-1]
-    raise ImportError("%s\nInstall using: pip install %s" % (error, module))
-
-import sys
-
-if sys.version_info < (2, 6):
-    raise AssertionError("Python 2.6 or later required")
-
 import tornado.httpserver
 import tornado.ioloop
 import tornado.web
