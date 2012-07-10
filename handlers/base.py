@@ -8,7 +8,7 @@ import bson.json_util
 
 from static import messages
 from static import languages
-from mongotask import *
+from db.mongotask import *
 
 class BaseHandler(tornado.web.RequestHandler):
     @property

@@ -8,7 +8,7 @@ import pymongo.errors
 from bson.objectid import ObjectId
 
 from static import languages
-from mongotask import MongoTask
+from db.mongotask import MongoTask
 from handlers.base import BaseHandler
 
 class SnippetBaseHandler(BaseHandler):

@@ -3,7 +3,7 @@ import tornado.web
 import tornado.escape
 from tornado import gen
 
-from mongotask import *
+from db.mongotask import *
 from handlers.base import *
 
 class LogoutHandler(BaseHandler):
