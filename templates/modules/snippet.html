@@ -1,10 +1,12 @@
-{% from languages import languages %}
+{% from static import languages %}
+{% from datetime import date %}
 <div class="well">
     {% if editable %}
     <h3><a href="/snippet/{{ snippet['_id'] }}">{{ snippet['language'] }}:&nbsp;{{ snippet['title'] }}</a></h3>
     {% else %}
     <h3>{{ snippet['language'] }}:&nbsp;{{ snippet['title'] }}</h3>
     {% end %}
+    <h6>{{ snippet['created'].strftime("%B %d, %Y %H:%M:%S") }}</h6> 
     <p>{{ snippet['description'] }}</p>
     {% set lang = languages.get(snippet['language']) %}
     {% if not lang %}

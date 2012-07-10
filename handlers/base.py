@@ -6,8 +6,8 @@ import asyncmongo
 import json
 import bson.json_util
 
-from messages import messages
-from languages import languages
+from static import messages
+from static import languages
 from mongotask import *
 
 class BaseHandler(tornado.web.RequestHandler):

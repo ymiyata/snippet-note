@@ -50,7 +50,7 @@
             <span class="add-on">Title</span><input name="title" type="text" style="width: 381px"
                 placeholder="Title for this snippet" {% if title %}value="{{ title }}"{% end %} class="span4"/>
             <select id="language-selector" name="language" style="width: 171px">
-                {% from languages import languages %}
+                {% from static import languages %}
                 {% for name, extension in sorted(languages.items()) %}
                     {% if language %}
                     <option value="{{ name }}" {% if name == language %}selected="selected"{% end %}>

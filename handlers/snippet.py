@@ -7,7 +7,7 @@ from tornado import gen
 import pymongo.errors
 from bson.objectid import ObjectId
 
-from languages import languages
+from static import languages
 from mongotask import MongoTask
 from handlers.base import BaseHandler
 
