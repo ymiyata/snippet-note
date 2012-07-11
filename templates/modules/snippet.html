@@ -2,7 +2,12 @@
 {% from datetime import date %}
 <div class="well">
     {% if editable %}
-    <h3><a href="/snippet/{{ snippet['_id'] }}">{{ snippet['language'] }}:&nbsp;{{ snippet['title'] }}</a></h3>
+    {% if snippet['title'] %}
+        {% set title = "%s: %s" % (snippet['language'], snippet['title']) %}
+    {% else %}
+        {% set title = "%s: unnamed" % snippet['language'] %}
+    {% end %}
+    <h3><a href="/snippet/{{ snippet['_id'] }}">{{ title }}</a></h3>
     {% else %}
     <h3>{{ snippet['language'] }}:&nbsp;{{ snippet['title'] }}</h3>
     {% end %}
