@@ -39,6 +39,7 @@
     {% set language = snippet['language'] %}
     {% set code = snippet['snippet'] %}
     {% set action_url = "/snippet/%s" % snippet["_id"] %}
+    {% set public = snippet['scope'] == 'public' %} 
 {% else %}
     {% set title, description, language, code = None, None, None, None %}
     {% set action_url = "/snippet" %}
@@ -70,6 +71,24 @@
         <textarea id="snippet-data" name="snippet" style="display:none;">
             {% if code %}{{ code }}{% end %}
         </textarea>
+        {% if snippet %}
+        <div id="scope-button-group" style="margin-top: 10px">
+            <div class="btn-group" data-toggle="buttons-radio">
+                {% if public %}
+                <button type="button" class="btn active" data-scope="public">Public</button>
+                <button type="button" class="btn" data-scope="private">Private</button>
+                {% else %}
+                <button type="button" class="btn" data-scope="public">Public</button>
+                <button type="button" class="btn active" data-scope="public">Private</button>
+                {% end %}
+            </div>
+            {% if public %}
+            <input type="hidden" name="private" value=""/>
+            {% else %}
+            <input type="hidden" name="private" value="private"/>
+            {% end %}
+        </div>
+        {% end %}
         <div class="form-actions">
             {% if snippet %}
             <button type="submit" class="btn btn-success">Save Snippet</button>

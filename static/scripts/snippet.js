@@ -52,4 +52,9 @@ $(function() {
   editor.getSession().on('change', function() {
     $("#snippet-data").text(editor.getSession().getValue());
   });
+  $("#scope-button-group button").click(function() {
+    var scope;
+    scope = $(this).attr('data-scope') === 'public' ? "" : "private";
+    $("#scope-button-group input[name='private']").val(scope);
+  });
 });

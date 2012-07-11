@@ -47,4 +47,10 @@ $ ->
     editor.getSession().on 'change', ->
         $("#snippet-data").text editor.getSession().getValue()
         return
+
+    $("#scope-button-group button").click ->
+        scope = if $(this).attr('data-scope') is 'public' then "" else "private"
+        $("#scope-button-group input[name='private']").val(scope)
+        return
     return
+

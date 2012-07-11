@@ -26,17 +26,17 @@ class SnippetHandler(SnippetBaseHandler):
     @gen.engine
     def post(self):
         user = self.get_current_user()
-        title = self.get_argument("title")
+        title = self.get_argument("title", "")
         description = self.get_argument("description", "")
         scope = "private" if self.get_argument("private", None) else "public"
-        snippet = self.get_argument("snippet", "")
+        code = self.get_argument("snippet", "")
         language = self.get_argument("language", "")
         yield MongoTask(self.db.snippet.insert, {
             "user": ObjectId(user['_id']),
             "title": title,
             "description": description,
             "scope": scope,
-            "snippet": snippet,
+            "snippet": code,
             "language": language,
             "created": datetime.now()
         })
@@ -67,17 +67,18 @@ class SnippetUpdateHandler(SnippetBaseHandler):
         })
         if not self.owns_snippet(snippet):
             self.send_error(404)
-        title = self.get_argument("title")
+        title = self.get_argument("title", "")
         description = self.get_argument("description", "")
+        scope = "private" if self.get_argument("private", None) else "public"
         code = self.get_argument("snippet", "")
-        language = self.get_argument("language", "")
+        language = self.get_argument("language", "Plain Text")
         yield MongoTask(self.db.snippet.update, {
                 "_id": ObjectId(snippet_id),
-                "user": ObjectId(user['_id'])
             }, {
                 "$set": {
                     "title": title,
                     "description": description,
+                    "scope": scope,
                     "snippet": code,
                     "language": language
                 }
