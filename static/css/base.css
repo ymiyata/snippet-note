@@ -1,9 +1,4 @@
-body {
-position: relative;
-padding-top: 70px;
-}
-#editor {
-position: relative;
-height: 350px;
-width: 600px;
-}
+body {position: relative;padding-top: 70px;}
+#editor {position: relative;height: 350px;width: 600px;}
+.collapsable:hover {cursor: pointer}
+li.ellipsis {list-style: none}

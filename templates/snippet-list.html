@@ -2,7 +2,7 @@
 {% block title %}Snippet Note | Snippets{% end %}
 
 {% block css %}
-<link rel="stylesheet" href="{{ static_url("css/code-prettify/prettify.css") }}"/>
+<link rel="stylesheet" href="{{ static_url("css/code-prettify/sons-of-obsidian.css") }}"/>
 {% end %}
 
 {% block scripts %}
@@ -23,11 +23,8 @@
 <script type="text/javascript" src="{{ static_url("scripts/code-prettify/lang-wiki.js") }}" charset="utf-8"></script>
 <script type="text/javascript" src="{{ static_url("scripts/code-prettify/lang-xq.js") }}" charset="utf-8"></script>
 <script type="text/javascript" src="{{ static_url("scripts/code-prettify/lang-yaml.js") }}" charset="utf-8"></script>
-<script type="text/javascript">
-$(function() {
-    prettyPrint();
-});
-</script>
+<script type="text/javascript" src="{{ static_url("scripts/code-prettify/lang-yaml.js") }}" charset="utf-8"></script>
+<script type="text/javascript" src="{{ static_url("scripts/snippet-list.js") }}" charset="utf-8"></script>
 {% end %}
 
 {% block body %}
