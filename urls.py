@@ -6,12 +6,13 @@ from handlers.authentication import *
 
 urls = [
     (r"/", IndexHandler),
-    (r"/mine", SnippetListHandler),
-    (r"/snippet/delete/(.*)", SnippetDeleteHandler),
-    (r"/snippet/(.*)", SnippetUpdateHandler),
-    (r"/snippet", SnippetHandler),
+    (r"/snippet/delete/(.+)", SnippetDeleteHandler),
+    (r"/snippet/update/(.+)", SnippetUpdateHandler),
+    (r"/snippet/new", SnippetCreateHandler),
     (r"/browse", BrowseHandler),
     (r"/logout", LogoutHandler),
+    (r"/activation", ActivationHandler),
     (r"/login/google", GoogleLoginHandler),
+    (r"/(.+)", SnippetListHandler)
 ]
 

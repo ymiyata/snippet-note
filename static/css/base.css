@@ -1,7 +1,8 @@
 body {position: relative;padding-top: 70px;}
-footer {border-top:1px solid #eee;height:100px}
+footer {border-top:1px solid #eee;height:100px; margin-top:25px;}
 #editor {position: relative;height: 350px;width: 600px;}
 #copyright {color:#888;font-size:12px;margin-top:25px;}
-.collapsable:hover {cursor: pointer}
 li.ellipsis {list-style: none;color:#888;margin-left:25px;}
 .unnamed {color:#aaa}
+.collapsable:hover {cursor: pointer}
+.step-cell {padding:10px;min-height:130px !important;}

@@ -8,6 +8,13 @@ messages['error'] = {
     500: "Oops. Something went wrong. Please try again later",
     'default': "Oops. Something went wrong. Please try again later"
 }
+messages['response'] = {
+    'activation_error_duplicate': "Username '%s' is already taken, please choose another username",
+    'activation_error_reserved': "'%s' is a reserved keyword, please choose another username",
+    'activation_error_username_empty': "Username field is empty. Please enter username",
+    'activation_error_invalid_character': "Username must only contain alphanumeric characters, underscores, or dashes and it must not start with a dash",
+    "activation_success": "Your acount is activated. You can start saving snippets!"
+}
 
 languages = {}
 languages = {
@@ -50,3 +57,14 @@ languages = {
     "XSLT": "xsl",
     "YAML": "yaml"
 }
+
+reserved_keywords = [
+    "activation",
+    "browse",
+    "help",
+    "language",
+    "login",
+    "logout",
+    "settings",
+    "snippet"
+]

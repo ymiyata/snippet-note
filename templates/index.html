@@ -1,12 +1,64 @@
 {% extends "base.html" %}
 {% block title %}Snippet Note{% end %}
 
+{% block css %}
+<link rel="stylesheet" href="{{ static_url("css/code-prettify/sons-of-obsidian.css") }}"/>
+{% end %}
+
+{% block scripts %}
+<script src="{{ static_url("scripts/code-prettify/prettify.js") }}" type="text/javascript" charset="utf-8"></script>
+<script src="{{ static_url("scripts/jquery/jquery.form.js") }}" type="text/javascript" charset="utf-8"></script>
+<script src="{{ static_url("scripts/index.js") }}" type="text/javascript" charset="utf-8"></script>
+{% end %}
+
 {% block body %}
-    <div class="hero-unit">
-        <h1 class="page-header">Snippet Note</h1>
-        <p class="lead">Snippet Note lets you save code snippets online.</p>
+<div class="row">
+    <div class="span4 step-cell">
+        <h2>Step 1:</h2>
         {% if not current_user %}
-        <a class="btn btn-primary btn-large" href="login/google">Sign in with Google Account</a>
+        <p class="lead">Sign up using Google Account</p>
+        <a class="btn btn-info btn-large" href="login/google">Sign in with Google Account</a>
+        {% else %}
+        <p class="lead">You are signed in as {{ current_user.get('email') }}</p>
         {% end %}
     </div>
+    <div class="span4 step-cell">
+        <h2>Step 2:</h2>
+        {% if not current_user %}
+        <p class="lead">Choose an username</p>
+        {% elif not current_user.get('activated') %}
+        <form id="activationForm" action="/activation" method="POST" class="form-inline">
+            <fieldset>
+                {% raw xsrf_form_html() %}
+                <p class="lead">Choose an username</p>
+                <div class="input-append">
+                    <input type="text" name="username" placeholder="username"/><button id="submitButton" type="submit" class="btn btn-info" data-loading-text="Processing...">Submit</button>
+                </div>
+            </fieldset>
+        </form>
+        {% else  %}
+        <p class="lead">Your username is {{ current_user.get('username') }}</p>
+        {% end %}
+    </div>
+    <div class="span3 step-cell">
+        <h2>Step 3:</h2>
+        {% if current_user and current_user.get('activated') %}
+        <p class="lead">Start <a href="/snippet/new">saving snippets</a></p>
+        {% else %}
+        <p class="lead">Start saving snippets</p>
+        {% end %}
+    </div>
+</div>
+<div id="message" class="alert alert-error hidden"></div>
+<div class="hero-unit">
+    <h1 class="page-header">Snippet Note <small>Save your code snippets online</small></h1>
+    <pre class="prettyprint linenums">
+        <code class="lang-cpp">#include &lt;iostream&gt;&#10;
+using namespace std;&#10;
+int main() {
+&nbsp;&nbsp;&nbsp;&nbsp;cout &lt;&lt; "Hello World" &lt;&lt; endl;
+&nbsp;&nbsp;&nbsp;&nbsp;return 0;
+}</code>
+</pre>
+</div>
 {% end %}

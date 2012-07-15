@@ -34,6 +34,12 @@ class BaseHandler(tornado.web.RequestHandler):
             return self.json_deserialize(user_json)
         return None
 
+    def get_home_url(self):
+        user = self.get_current_user()
+        if user and user['username']:
+            return u"/%s" % user['username']
+        return u"/"
+
     def write_error(self, status_code, **kwargs):
         if status_code in messages['error']:
             message = messages['error'][status_code]
@@ -43,6 +49,13 @@ class BaseHandler(tornado.web.RequestHandler):
 
 class IndexHandler(BaseHandler):
     def get(self):
+        next_url = self.get_argument("next", None)
+        if next_url:
+            if self.get_current_user():
+                self.redirect(next_url)
+            else:
+                self.redirect(u"/")
+            return
         self.render(u"index.html")
 
 class BrowseHandler(BaseHandler):
@@ -62,7 +75,8 @@ class BrowseHandler(BaseHandler):
             skip=page * snippet_per_page,
             sort=[("_id", -1)]
         )
-        self.render(u"snippet-list.html", relative_url="browse", 
+        self.render(u"snippet-list.html", relative_url="browse",
+                                          editable=False,
                                           snippets=snippets,
                                           language=language,
                                           page=page,

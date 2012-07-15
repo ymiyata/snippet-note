@@ -1,27 +1,30 @@
 from datetime import datetime
+import string
 
 import tornado.web
 import tornado.httpclient
 from tornado import gen
 
-import pymongo.errors
 from bson.objectid import ObjectId
 
 from static import languages
 from db.mongotask import MongoTask
 from handlers.base import BaseHandler
+from decorators import require_activation
 
 class SnippetBaseHandler(BaseHandler):
     def owns_snippet(self, snippet):
         user = self.get_current_user()
-        return ObjectId(user['_id']) == snippet['user']
+        return user['username'] == snippet['user']
 
-class SnippetHandler(SnippetBaseHandler):
+class SnippetCreateHandler(SnippetBaseHandler):
     @tornado.web.authenticated
+    @require_activation
     def get(self):
         self.render(u"snippet.html", snippet=None)
 
     @tornado.web.authenticated
+    @require_activation
     @tornado.web.asynchronous
     @gen.engine
     def post(self):
@@ -32,7 +35,7 @@ class SnippetHandler(SnippetBaseHandler):
         code = self.get_argument("snippet", "")
         language = self.get_argument("language", "")
         yield MongoTask(self.db.snippet.insert, {
-            "user": ObjectId(user['_id']),
+            "user": user['username'],
             "title": title,
             "description": description,
             "scope": scope,
@@ -40,10 +43,11 @@ class SnippetHandler(SnippetBaseHandler):
             "language": language,
             "created": datetime.now()
         })
-        self.redirect(u"/mine")
+        self.redirect(self.get_home_url())
 
 class SnippetUpdateHandler(SnippetBaseHandler):
     @tornado.web.authenticated
+    @require_activation
     @tornado.web.asynchronous
     @gen.engine
     def get(self, snippet_id=None):
@@ -57,6 +61,7 @@ class SnippetUpdateHandler(SnippetBaseHandler):
         self.render(u"snippet.html", snippet=snippet)
 
     @tornado.web.authenticated
+    @require_activation
     @tornado.web.asynchronous
     @gen.engine
     def post(self, snippet_id=None):
@@ -83,10 +88,11 @@ class SnippetUpdateHandler(SnippetBaseHandler):
                     "language": language
                 }
             }, safe=True)
-        self.redirect(u"/mine")
+        self.redirect(self.get_home_url())
 
 class SnippetDeleteHandler(SnippetBaseHandler):
     @tornado.web.authenticated
+    @require_activation
     @tornado.web.asynchronous
     @gen.engine
     def get(self, snippet_id=None):
@@ -100,20 +106,28 @@ class SnippetDeleteHandler(SnippetBaseHandler):
         yield MongoTask(self.db.snippet.remove, spec_or_id={
             "_id": ObjectId(snippet['_id'])
         }, safe=True)
-        self.redirect(u"/mine")
+        self.redirect(self.get_home_url())
 
 class SnippetListHandler(SnippetBaseHandler):
     @tornado.web.authenticated
+    @require_activation
     @tornado.web.asynchronous
     @gen.engine
-    def get(self):
+    def get(self, username=None):
+        if not username:
+            self.redirect(u"/browse")
+            return
+        username = string.lower(username)
         snippet_per_page = 10 
         user = self.get_current_user()
-        query = {"user": user['_id']}
+        query = {"user": username}
         language = self.get_argument("language", None)
         page = int(self.get_argument("page", "0"))
         if language and language in languages:
             query["language"] = language
+        current_users_page = (username == user.get("username"))
+        if not current_users_page:
+            query["scope"] = "public"
         snippets = yield MongoTask(
             self.db.snippet.find,
             spec=query,
@@ -121,7 +135,8 @@ class SnippetListHandler(SnippetBaseHandler):
             skip=page * snippet_per_page,
             sort=[("_id", -1)]
         )
-        self.render(u"snippet-list.html", relative_url="mine", 
+        self.render(u"snippet-list.html", relative_url=username,
+                                          editable=current_users_page,
                                           snippets=snippets,
                                           language=language,
                                           page=page,

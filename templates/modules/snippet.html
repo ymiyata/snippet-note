@@ -1,23 +1,27 @@
 {% from static import languages %}
-{% from datetime import date %}
 <div class="well">
+    {% set unnamed = False if snippet.get('title') else True %}
+    {% set username = snippet.get('user') %}
+    {% set datestr = snippet.get('created').strftime("%B %d, %Y %H:%M:%S") %} 
+    {% if unnamed %}
+        {% set title = "Unnamed" %}
+    {% else %}
+        {% set title = snippet.get('title') %}
+    {% end %}
     {% if editable %}
-    {% if snippet['title'] %}
-        {% set title = "%s: %s" % (snippet['language'], snippet['title']) %}
+    <h3><a href="/snippet/update/{{ snippet['_id'] }}">{{ snippet.get('language') }}:&nbsp;
+        <span {% if unnamed %}class="unnamed"{% end %}>{{ title }}</span></a></h3>
     {% else %}
-        {% set title = "%s: unnamed" % snippet['language'] %}
+    <h3>{{ snippet.get('language') }}:&nbsp;<span {% if unnamed %}class="unnamed"{% end %}>
+        {{ title }}</span></h3>
     {% end %}
-    <h3><a href="/snippet/{{ snippet['_id'] }}">{{ title }}</a></h3>
-    {% else %}
-    <h3>{{ snippet['language'] }}:&nbsp;{{ snippet['title'] }}</h3>
-    {% end %}
-    <h6>{{ snippet['created'].strftime("%B %d, %Y %H:%M:%S") }}</h6> 
-    <p>{{ snippet['description'] }}</p>
-    {% set lang = languages.get(snippet['language']) %}
+    <h6>{{ datestr }} by <a href="/{{ username }}">{{ username }}</a></h6> 
+    <p>{{ snippet.get('description') }}</p>
+    {% set lang = languages.get(snippet.get('language')) %}
     {% if not lang %}
         {% set lang = "" %}
     {% end %}
     <pre class="prettyprint linenums">
-        <code class="lang-{{ lang }}">{{ snippet['snippet'] }}</code>
+        <code class="lang-{{ lang }}">{{ snippet.get('snippet') }}</code>
     </pre>
 </div>

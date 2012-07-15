@@ -33,71 +33,79 @@
 {% end %}
 
 {% block body %}
-{% if snippet %}
-    {% set title = snippet['title'] %}
-    {% set description = snippet['description'] %}
-    {% set language = snippet['language'] %}
-    {% set code = snippet['snippet'] %}
-    {% set action_url = "/snippet/%s" % snippet["_id"] %}
-    {% set public = snippet['scope'] == 'public' %} 
-{% else %}
-    {% set title, description, language, code = None, None, None, None %}
-    {% set action_url = "/snippet" %}
-{% end %}
-<form action="{{ action_url }}" method="POST" class="well">
-    <fieldset>
-        {% raw xsrf_form_html() %}
-        <div class="input-prepend">
-            <span class="add-on">Title</span><input name="title" type="text" style="width: 381px"
-                placeholder="Title for this snippet" {% if title %}value="{{ title }}"{% end %} class="span4"/>
-            <select id="language-selector" name="language" style="width: 171px">
-                {% from static import languages %}
-                {% for name, extension in sorted(languages.items()) %}
-                    {% if language %}
-                    <option value="{{ name }}" {% if name == language %}selected="selected"{% end %}>
-                            {{ name }}</option>
-                    {% else %}
-                    <option value="{{ name }}" {% if extension == "misc" %}selected="selected"{% end %}>
-                            {{ name }}</option>
-                    {% end %}
-                {% end %}
-            </select>
-        </div>
-        <div class="input-prepend">
-            <span class="add-on">Description</span><input name="description" type="text" style="width: 514px"
-                placeholder="Description of this snippet" {% if description %}value="{{ description }}"{% end %}/>
-        </div>
-        <div id="editor">{% if code %}{{ code }}{% end %}</div>
-        <textarea id="snippet-data" name="snippet" style="display:none;">
-            {% if code %}{{ code }}{% end %}
-        </textarea>
-        {% if snippet %}
-        <div id="scope-button-group" style="margin-top: 10px">
-            <div class="btn-group" data-toggle="buttons-radio">
-                {% if public %}
-                <button type="button" class="btn active" data-scope="public">Public</button>
-                <button type="button" class="btn" data-scope="private">Private</button>
-                {% else %}
-                <button type="button" class="btn" data-scope="public">Public</button>
-                <button type="button" class="btn active" data-scope="public">Private</button>
-                {% end %}
-            </div>
-            {% if public %}
-            <input type="hidden" name="private" value=""/>
-            {% else %}
-            <input type="hidden" name="private" value="private"/>
-            {% end %}
-        </div>
-        {% end %}
-        <div class="form-actions">
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span8">
             {% if snippet %}
-            <button type="submit" class="btn btn-success">Save Snippet</button>
-            <a href="/snippet/delete/{{ snippet['_id'] }}" class="btn btn-danger">Delete Snippet</a>
+                {% set title = snippet['title'] %}
+                {% set description = snippet['description'] %}
+                {% set language = snippet['language'] %}
+                {% set code = snippet['snippet'] %}
+                {% set action_url = "/snippet/update/%s" % snippet["_id"] %}
+                {% set public = snippet['scope'] == 'public' %} 
             {% else %}
-            <button type="submit" class="btn btn-success">Create Public Snippet</button>
-            <button type="submit" class="btn btn-warning" name="private" value="private">Create Private Snippet</button>
+                {% set title, description, language, code = None, None, None, None %}
+                {% set action_url = "/snippet/new" %}
             {% end %}
+            <form action="{{ action_url }}" method="POST" class="well">
+                <fieldset>
+                    {% raw xsrf_form_html() %}
+                    <div class="input-prepend">
+                        <span class="add-on">Title</span><input name="title" type="text" style="width: 381px"
+                            placeholder="Title for this snippet" {% if title %}value="{{ title }}"{% end %} class="span4"/>
+                        <select id="language-selector" name="language" style="width: 171px">
+                            {% from static import languages %}
+                            {% for name, extension in sorted(languages.items()) %}
+                                {% if language %}
+                                <option value="{{ name }}" {% if name == language %}selected="selected"{% end %}>
+                                        {{ name }}</option>
+                                {% else %}
+                                <option value="{{ name }}" {% if extension == "misc" %}selected="selected"{% end %}>
+                                        {{ name }}</option>
+                                {% end %}
+                            {% end %}
+                        </select>
+                    </div>
+                    <div class="input-prepend">
+                        <span class="add-on">Description</span><input name="description" type="text" style="width: 514px"
+                            placeholder="Description of this snippet" {% if description %}value="{{ description }}"{% end %}/>
+                    </div>
+                    <div id="editor">{% if code %}{{ code }}{% end %}</div>
+                    <textarea id="snippet-data" name="snippet" style="display:none;">
+                        {% if code %}{{ code }}{% end %}
+                    </textarea>
+                    {% if snippet %}
+                    <div id="scope-button-group" style="margin-top: 10px">
+                        <div class="btn-group" data-toggle="buttons-radio">
+                            {% if public %}
+                            <button type="button" class="btn active" data-scope="public">Public</button>
+                            <button type="button" class="btn" data-scope="private">Private</button>
+                            {% else %}
+                            <button type="button" class="btn" data-scope="public">Public</button>
+                            <button type="button" class="btn active" data-scope="public">Private</button>
+                            {% end %}
+                        </div>
+                        {% if public %}
+                        <input type="hidden" name="private" value=""/>
+                        {% else %}
+                        <input type="hidden" name="private" value="private"/>
+                        {% end %}
+                    </div>
+                    {% end %}
+                    <div class="form-actions">
+                        {% if snippet %}
+                        <button type="submit" class="btn btn-info">Save Snippet</button>
+                        <a href="/snippet/delete/{{ snippet['_id'] }}" class="btn btn-danger">Delete Snippet</a>
+                        {% else %}
+                        <button type="submit" class="btn btn-info">Create Public Snippet</button>
+                        <button type="submit" class="btn btn-warning" name="private" value="private">Create Private Snippet</button>
+                        {% end %}
+                    </div>
+                </fieldset>
+            </form>
         </div>
-    </fieldset>
-</form>
+        <div class="span4">
+        </div>
+    </div>
+</div>
 {% end %}
