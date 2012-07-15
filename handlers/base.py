@@ -50,13 +50,17 @@ class BaseHandler(tornado.web.RequestHandler):
 class IndexHandler(BaseHandler):
     def get(self):
         next_url = self.get_argument("next", None)
+        user = self.get_current_user()
         if next_url:
-            if self.get_current_user():
+            if user:
                 self.redirect(next_url)
             else:
                 self.redirect(u"/")
             return
-        self.render(u"index.html")
+        if user and user.get('username'):
+            self.redirect(u"/%s" % user.get("username"))
+        else:
+            self.render(u"index.html")
 
 class BrowseHandler(BaseHandler):
     @tornado.web.asynchronous

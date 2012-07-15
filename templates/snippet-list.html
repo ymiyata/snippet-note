@@ -31,6 +31,11 @@
 <div class="container-fluid">
     <div class="row-fluid">
         <div id="snippets" class="span9 columns">
+            {% if relative_url == "browse" %}
+            <h2 class="page-header">Recent Snippets</h2>
+            {% else %}
+            <h2 class="page-header">{{ relative_url }}'s Snippets</h2>
+            {% end %}
             {% for snippet in snippets %}
             {% module Snippet(snippet, editable) %}
             {% end %}
