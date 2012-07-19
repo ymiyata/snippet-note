@@ -8,6 +8,7 @@ urls = [
     (r"/", IndexHandler),
     (r"/snippet/delete/(.+)", SnippetDeleteHandler),
     (r"/snippet/update/(.+)", SnippetUpdateHandler),
+    (r"/snippet/download/(.+)", SnippetDownloadHandler),
     (r"/snippet/new", SnippetCreateHandler),
     (r"/browse", BrowseHandler),
     (r"/logout", LogoutHandler),

@@ -6,3 +6,7 @@ li.ellipsis {list-style: none;color:#888;margin-left:25px;}
 .unnamed {color:#aaa}
 .collapsable:hover {cursor: pointer}
 .step-cell {padding:10px;min-height:130px !important;}
+.snippet-module {margin-bottom:18px;border:1px solid #eee;-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px;}
+.snippet-info {padding:13px 0 0 13px;background-color:#fefefe;-moz-border-radius:4px 4px 0 0;-webkit-border-radius:4px 4px 0 0;border-radius:4px 4px 0 0;}
+.snippet-info .download {-moz-border-radius:0 0 0 4px;-webkit-border-radius:0 0 0 4px;border-radius:0 0 0 4px;}
+.snippet.prettyprint {margin-bottom:0;-moz-border-radius:0 0 4px 4px;-webkit-border-radius:0 0 4px 4px;border-radius:0 0 4px 4px;}

@@ -142,3 +142,20 @@ class SnippetListHandler(SnippetBaseHandler):
                                           page=page,
                                           snippet_per_page=snippet_per_page)
 
+class SnippetDownloadHandler(SnippetBaseHandler):
+    @tornado.web.authenticated
+    @require_activation
+    @tornado.web.asynchronous
+    @gen.engine
+    def get(self, snippet_id=None):
+        if not snippet_id:
+            self.send_error(404)
+        snippet = yield MongoTask(self.db.snippet.find_one, {
+            "_id": ObjectId(snippet_id)
+        })
+        if not self.owns_snippet(snippet):
+            self.send_error(404)
+        self.set_header("Content-Type", "application/force-download")
+        self.set_header("Content-Disposition", "attachment; filename=%s" % snippet.get("title"))
+        self.write(snippet.get("snippet"))
+        self.finish()
