@@ -36,8 +36,12 @@
             {% else %}
             <h2 class="page-header">{{ relative_url }}'s Snippets</h2>
             {% end %}
-            {% for snippet in snippets %}
-            {% module Snippet(snippet, editable) %}
+            {% if len(snippets) > 0 %}
+                {% for snippet in snippets %}
+                {% module Snippet(snippet, editable) %}
+                {% end %}
+            {% else %}
+            <div class="no-snippet-placeholder"><p>No Snippets</p></div>
             {% end %}
             <ul class="pager">
                 {% from urllib import urlencode %}
