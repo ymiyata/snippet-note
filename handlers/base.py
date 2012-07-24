@@ -6,8 +6,9 @@ import asyncmongo
 import json
 import bson.json_util
 
+from pyes import ES
+
 from static import messages
-from static import languages
 from db.mongotask import *
 
 class BaseHandler(tornado.web.RequestHandler):
@@ -16,11 +17,17 @@ class BaseHandler(tornado.web.RequestHandler):
         if not hasattr(self, "_db"):
             settings = dict(
                 host="127.0.0.1",
-                port=9090,
+                port=27017,
                 dbname="snippetnote"
             )
             self._db = asyncmongo.Client(pool_id="snippetnote_pool", **settings)
         return self._db
+
+    @property
+    def es(self):
+        if not hasattr(self, "_es"):
+            self._es = ES("127.0.0.1:9200")
+        return self._es
 
     def json_deserialize(self, json_data):
         return json.loads(json_data, object_hook=bson.json_util.object_hook)
@@ -61,27 +68,3 @@ class IndexHandler(BaseHandler):
             self.redirect(u"/%s" % user.get("username"))
         else:
             self.render(u"index.html")
-
-class BrowseHandler(BaseHandler):
-    @tornado.web.asynchronous
-    @gen.engine
-    def get(self):
-        snippet_per_page = 10
-        query = {"scope": "public"}
-        language = self.get_argument("language", None)
-        page = int(self.get_argument("page", "0"))
-        if language and language in languages:
-            query["language"] = language
-        snippets = yield MongoTask(
-            self.db.snippet.find,
-            spec=query,
-            limit=snippet_per_page,
-            skip=page * snippet_per_page,
-            sort=[("_id", -1)]
-        )
-        self.render(u"snippet-list.html", relative_url="browse",
-                                          editable=False,
-                                          snippets=snippets,
-                                          language=language,
-                                          page=page,
-                                          snippet_per_page=snippet_per_page)

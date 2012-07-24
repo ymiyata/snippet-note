@@ -36,7 +36,11 @@
             {% else %}
             <h2 class="page-header">{{ relative_url }}'s Snippets</h2>
             {% end %}
-            {% if len(snippets) > 0 %}
+            <form action="/{{ relative_url }}" method="GET" class="form-search">
+                <input type="text" name="q" class="input-large search-query" placeholder="Search...">
+                <button type="submit" class="btn btn-info"><i class="icon-search icon-white"></i> Search</button>
+            </form>
+            {% if len([p for p in snippets]) > 0 %}
                 {% for snippet in snippets %}
                 {% module Snippet(snippet, editable) %}
                 {% end %}

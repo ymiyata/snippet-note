@@ -10,10 +10,9 @@ urls = [
     (r"/snippet/update/(.+)", SnippetUpdateHandler),
     (r"/snippet/download/(.+)", SnippetDownloadHandler),
     (r"/snippet/new", SnippetCreateHandler),
-    (r"/browse", BrowseHandler),
+    (r"/browse", SnippetBrowseHandler),
     (r"/logout", LogoutHandler),
     (r"/activation", ActivationHandler),
     (r"/login/google", GoogleLoginHandler),
-    (r"/(.+)", SnippetListHandler)
+    (r"/(.+)", UserSnippetListHandler)
 ]
-

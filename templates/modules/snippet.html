@@ -1,8 +1,14 @@
+{% from datetime import datetime %}
+{% import types %}
 {% from static import languages %}
 <div class="snippet-module">
     {% set unnamed = False if snippet.get('title') else True %}
     {% set username = snippet.get('user') %}
-    {% set datestr = snippet.get('created').strftime("%B %d, %Y %H:%M:%S") %} 
+    {% set date = snippet.get('created') %}
+    {% if type(date) is types.StringType or type(date) is types.UnicodeType %}
+        {% set date = datetime.strptime(date, "%Y-%m-%dT%H:%M:%S.%fZ") %}
+    {% end %}
+    {% set datestr = date.strftime("%B %d, %Y %H:%M:%S") %}
     {% if unnamed %}
         {% set title = "Unnamed" %}
     {% else %}
