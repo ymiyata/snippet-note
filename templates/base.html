@@ -25,6 +25,9 @@
                         </button>
                         <div class="nav-collapse collapse">
                             <ul class="nav">
+                                <form action="/browse" method="GET" class="navbar-search">
+                                    <input type="text" name="q" class="span2 search-query" placeholder="Search...">
+                                </form>
                                 <li><a href="/browse">Browse</a></li>
                                 {% if current_user and current_user.get('activated') %}
                                 <li><a href="/{{ current_user.get('username') }}">My Snippets</a></li>
